@@ -1,0 +1,64 @@
+﻿@model TrashCollector.Models.Employee
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeUserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeUserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TodaysPickups)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TodaysPickups)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ZipCodes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ZipCodes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HasPickUpBeenCompleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HasPickUpBeenCompleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HasChargeBeenApplied)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HasChargeBeenApplied)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
