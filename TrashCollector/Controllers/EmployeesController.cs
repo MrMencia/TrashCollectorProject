@@ -19,8 +19,10 @@ namespace TrashCollector.Controllers
         public ActionResult Index()
         {
             var currentUserId = User.Identity.GetUserId();
-            var currentEmployee = db.Employees.Where(a => a.ApplicationId == currentUserId);
-            return View(currentEmployee);
+            var currentEmployee = db.Employees.Where(a => a.ApplicationId == currentUserId).Single();
+
+            var customers = db.Customers.Where(c => c.ZipCode == currentEmployee.ZipCode).ToList();
+            return View(customers);
         }
 
         // GET: Employees/Details/5
@@ -118,27 +120,27 @@ namespace TrashCollector.Controllers
             return RedirectToAction("Index");
         }
 
-        ////Pickups by Day!!
-        //public ActionResult PickupsByDay(int DayOfWeek)
-        //{
-        //    string currentUserId = User.Identity.GetUserId();
-        //    Employee employee = db.Employees.Where(e => e.ApplicationId == currentUserId).Single();
-        //    DateTime todaysDate = new DateTime();
-        //    var customerPickup = db.Customers.Where(c => c.ZipCode == employee.ZipCode && ((int)c. RegularPickupDay == DayOfWeek)).Include(c => c.Pickup).ToList();
+        //Filtering PickupDays(Incomplete)
+        public ActionResult FilterPickupDays(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            // Customer customer = db.Customers.Find(id);
 
-        //    for (int i = 0; i < customerPickup.count; i++)
-        //    {
-        //        if (customerPickup[i].Pickup.TemporarySuspensionStart != null && customerPickup[i].Pickup.TemporarySuspensionEnd != null)
-        //        {
-        //            if (todaysDate.Ticks > ((DateTime)customerPickup[i].Pickup.TemporarySuspensionStart).Ticks && todaysDate.Ticks < ((DateTime)customerPickup[i].Pickup.TemporarySuspensionEnd).Ticks)
-        //            {
-        //                customerPickup.RemoveAt(i);
-        //            }
-        //        }
-        //    }
-        //    return View(customerPickup);
+            var customer = db.Customers.Find(id);
+            //customer.DaysOfWeek;
+            db.SaveChanges();
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Index");
+        }
 
-        //}
+
+
 
         //GET: Confirm pickup!!
         public ActionResult ConfirmPickup(int? id)
@@ -148,12 +150,15 @@ namespace TrashCollector.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             // Customer customer = db.Customers.Find(id);
-            Customer customer = db.Customers.Where(c => c.Id == id).FirstOrDefault();
+
+            var customer = db.Customers.Find(id);
+            customer.CustomerBalance -= 25;
+            db.SaveChanges();
             if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return RedirectToAction("Index");
         }
 
 

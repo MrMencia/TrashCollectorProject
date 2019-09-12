@@ -16,6 +16,7 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.ApplicationId)
 
     <div class="form-group">
         @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -36,7 +37,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.DaysOfWeek, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("DaysOfWeek", new SelectList(Enum.GetValues(typeof(DayOfWeek))), "Select Pickup Day", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.DaysOfWeek, new SelectList(Enum.GetValues(typeof(DayOfWeek))), "Select Pickup Day", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.DaysOfWeek, "", new { @class = "text-danger" })
         </div>
     </div>
