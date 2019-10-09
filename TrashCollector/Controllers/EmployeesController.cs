@@ -20,10 +20,24 @@ namespace TrashCollector.Controllers
         {
             var currentUserId = User.Identity.GetUserId();
             var currentEmployee = db.Employees.Where(a => a.ApplicationId == currentUserId).Single();
-
             var customers = db.Customers.Where(c => c.ZipCode == currentEmployee.ZipCode).ToList();
             return View(customers);
         }
+
+
+        //public List<Customer> GetCurrentDayCustomers()
+        //{
+        //    var employeeId = User.Identity.GetUserId();
+        //    var currentEmployee = db.Employees.Where(e => e.ApplicationId == employeeId).Single();
+        //    var dayOfWeekToday = DateTime.Now.DayOfWeek.ToString();
+        //    var dateToday = DateTime.Now;
+        //    var customerZipCodeMatch = db.Customers.Where(c => c.ZipCode == currentEmployee.ZipCode && currentEmployee.PickUpDay == dayOfWeekToday || c.ExtraPickupDay == dateToday).ToList();
+        //    var customerSuspensionRemoved = customerZipCodeMatch.Where(c => (c.AccountSuspensionStartDate > dateToday && c.AccountSuspensionEndDate < dateToday)
+        //    || (c.AccountSuspensionEndDate == null && c.AccountSuspensionStartDate == null)).ToList();
+        //    return customerSuspensionRemoved;
+        //}
+
+
 
         // GET: Employees/Details/5
         public ActionResult Details(int? id)
@@ -170,5 +184,53 @@ namespace TrashCollector.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+
+        public ActionResult PickUps(int? id)
+        {
+            if (id == null)
+            {
+                Employee employee = db.Employees.Find(id);
+                employee = db.Employees.Where(e => e.Id == employee.Id).Single();
+                List<Customer> customersInArea = db.Customers.Where(c => c.ZipCode == employee.ZipCode).ToList();//Need to add a day to the filter
+                return View(customersInArea);
+            }
+            else
+            {
+                Employee employee = db.Employees.Find(id);
+                employee = db.Employees.Where(e => e.Id == employee.Id).Single();
+                List<Customer> customersInArea = db.Customers.Where(c => c.ZipCode == employee.ZipCode).ToList();
+                return View(customersInArea);
+            }
+
+        }
+
+
+        public ActionResult Search(System.DayOfWeek? dayOfWeek)
+        {
+            var currentUId = User.Identity.GetUserId();
+            var employee = db.Employees.Where(e => e.ApplicationId == currentUId).SingleOrDefault();
+            var todaysPickups = db.Customers.Where(c => c.ZipCode == employee.ZipCode);
+            var daysMatched = db.Customers.Where(c => c.DaysOfWeek.Equals(dayOfWeek));
+            if (todaysPickups.Equals(null))
+            {
+                return View("Index");
+            }
+            else
+            {
+                return View(daysMatched);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }
