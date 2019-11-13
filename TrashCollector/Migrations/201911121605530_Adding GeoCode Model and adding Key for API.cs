@@ -3,7 +3,7 @@ namespace TrashCollector.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class finishedupcustomersideofthings : DbMigration
+    public partial class AddingGeoCodeModelandaddingKeyforAPI : DbMigration
     {
         public override void Up()
         {

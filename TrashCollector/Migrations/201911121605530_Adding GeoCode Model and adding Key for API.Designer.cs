@@ -7,13 +7,13 @@ namespace TrashCollector.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class AddingGeoCodeModelandaddingKeyforAPI : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddingGeoCodeModelandaddingKeyforAPI));
         
         string IMigrationMetadata.Id
         {
-            get { return "201909091805155_Initial"; }
+            get { return "201911121605530_Adding GeoCode Model and adding Key for API"; }
         }
         
         string IMigrationMetadata.Source

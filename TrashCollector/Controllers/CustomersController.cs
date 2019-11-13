@@ -8,12 +8,15 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TrashCollector.Models;
+using Newtonsoft.Json;
 
 namespace TrashCollector.Controllers
 {
     public class CustomersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+
 
         // GET: Customers
         public ActionResult Index()
@@ -23,6 +26,9 @@ namespace TrashCollector.Controllers
             return View(currentCustomer);
         }
 
+
+
+
         // GET: Customers/Details/5
         public ActionResult Details(int? id)
         {
@@ -31,12 +37,31 @@ namespace TrashCollector.Controllers
             return View(currentCustomer);
         }
 
+        public string ConvertAddressToGoogleFormat(Customer customer)
+        {
+            string googleFormatAddress = customer.StreetAddress + "," + customer.City + "," + customer.State + "," + customer.ZipCode + ",USA";
+            return googleFormatAddress;
+        }
+
+        public GeoCode GeoLocate(string address)
+        {
+            var requestUrl = $"https://maps.googleapis.com/maps/api/geocode/json?address={address}&key=AIzaSyCvNx58z28nAtRCUDGJU6xi2qisdrmE1dQ";
+            var result = new WebClient().DownloadString(requestUrl);
+            GeoCode geocode = JsonConvert.DeserializeObject<GeoCode>(result);
+            return geocode;
+        }
+
+
+
         // GET: Customers/Create
         public ActionResult Create()
         {
 
             return View();
         }
+
+
+
 
         // POST: Customers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -57,6 +82,10 @@ namespace TrashCollector.Controllers
             return View(customer);
         }
 
+
+
+
+
         // GET: Customers/Edit/5
         public ActionResult Edit(int? id)
 
@@ -75,6 +104,10 @@ namespace TrashCollector.Controllers
             return View(customer);
         }
 
+
+
+
+
         // POST: Customers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -91,6 +124,9 @@ namespace TrashCollector.Controllers
             return View(customer);
         }
 
+
+
+
         // GET: Customers/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -106,6 +142,9 @@ namespace TrashCollector.Controllers
             return View(customer);
         }
 
+
+
+
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -116,6 +155,8 @@ namespace TrashCollector.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

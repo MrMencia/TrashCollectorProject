@@ -15,6 +15,8 @@ namespace TrashCollector.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+
+
         // GET: Employees
         public ActionResult Index()
         {
@@ -23,19 +25,6 @@ namespace TrashCollector.Controllers
             var customers = db.Customers.Where(c => c.ZipCode == currentEmployee.ZipCode).ToList();
             return View(customers);
         }
-
-
-        //public List<Customer> GetCurrentDayCustomers()
-        //{
-        //    var employeeId = User.Identity.GetUserId();
-        //    var currentEmployee = db.Employees.Where(e => e.ApplicationId == employeeId).Single();
-        //    var dayOfWeekToday = DateTime.Now.DayOfWeek.ToString();
-        //    var dateToday = DateTime.Now;
-        //    var customerZipCodeMatch = db.Customers.Where(c => c.ZipCode == currentEmployee.ZipCode && currentEmployee.PickUpDay == dayOfWeekToday || c.ExtraPickupDay == dateToday).ToList();
-        //    var customerSuspensionRemoved = customerZipCodeMatch.Where(c => (c.AccountSuspensionStartDate > dateToday && c.AccountSuspensionEndDate < dateToday)
-        //    || (c.AccountSuspensionEndDate == null && c.AccountSuspensionStartDate == null)).ToList();
-        //    return customerSuspensionRemoved;
-        //}
 
 
 
@@ -54,11 +43,18 @@ namespace TrashCollector.Controllers
             return View(employee);
         }
 
+
+
+
         // GET: Employees/Create
         public ActionResult Create()
         {
             return View();
         }
+
+
+
+
 
         // POST: Employees/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -77,6 +73,9 @@ namespace TrashCollector.Controllers
             return View(employee);
         }
 
+
+
+
         // GET: Employees/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -91,6 +90,9 @@ namespace TrashCollector.Controllers
             }
             return View(employee);
         }
+
+
+
 
         // POST: Employees/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -108,6 +110,9 @@ namespace TrashCollector.Controllers
             return View(employee);
         }
 
+
+
+
         // GET: Employees/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -123,6 +128,9 @@ namespace TrashCollector.Controllers
             return View(employee);
         }
 
+
+
+
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -134,6 +142,10 @@ namespace TrashCollector.Controllers
             return RedirectToAction("Index");
         }
 
+
+
+
+
         //Filtering PickupDays(Incomplete)
         public ActionResult FilterPickupDays(int? id)
         {
@@ -141,10 +153,13 @@ namespace TrashCollector.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             // Customer customer = db.Customers.Find(id);
 
             var customer = db.Customers.Find(id);
+
             //customer.DaysOfWeek;
+
             db.SaveChanges();
             if (customer == null)
             {
@@ -168,6 +183,7 @@ namespace TrashCollector.Controllers
             var customer = db.Customers.Find(id);
             customer.CustomerBalance -= 25;
             db.SaveChanges();
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -186,14 +202,14 @@ namespace TrashCollector.Controllers
         }
 
 
-
+        //Need to add "PickUpDay" to the filter
         public ActionResult PickUps(int? id)
         {
             if (id == null)
             {
                 Employee employee = db.Employees.Find(id);
                 employee = db.Employees.Where(e => e.Id == employee.Id).Single();
-                List<Customer> customersInArea = db.Customers.Where(c => c.ZipCode == employee.ZipCode).ToList();//Need to add a day to the filter
+                List<Customer> customersInArea = db.Customers.Where(c => c.ZipCode == employee.ZipCode).ToList();
                 return View(customersInArea);
             }
             else
@@ -207,21 +223,21 @@ namespace TrashCollector.Controllers
         }
 
 
-        public ActionResult Search(System.DayOfWeek? dayOfWeek)
-        {
-            var currentUId = User.Identity.GetUserId();
-            var employee = db.Employees.Where(e => e.ApplicationId == currentUId).SingleOrDefault();
-            var todaysPickups = db.Customers.Where(c => c.ZipCode == employee.ZipCode);
-            var daysMatched = db.Customers.Where(c => c.DaysOfWeek.Equals(dayOfWeek));
-            if (todaysPickups.Equals(null))
-            {
-                return View("Index");
-            }
-            else
-            {
-                return View(daysMatched);
-            }
-        }
+        //public ActionResult Search(System.DayOfWeek? dayOfWeek)
+        //{
+        //    var currentUId = User.Identity.GetUserId();
+        //    var employee = db.Employees.Where(e => e.ApplicationId == currentUId).SingleOrDefault();
+        //    var todaysPickups = db.Customers.Where(c => c.ZipCode == employee.ZipCode);
+        //    var daysMatched = db.Customers.Where(c => c.DaysOfWeek.Equals(dayOfWeek));
+        //    if (todaysPickups.Equals(null))
+        //    {
+        //        return View("Index");
+        //    }
+        //    else
+        //    {
+        //        return View(daysMatched);
+        //    }
+        //}
 
 
 

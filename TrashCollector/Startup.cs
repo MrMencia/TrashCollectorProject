@@ -27,7 +27,8 @@ namespace TrashCollector
 
 
 
-            // Creating Customer role    
+            // Creating Customer role
+
             if (!roleManager.RoleExists("Customer"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
@@ -35,8 +36,14 @@ namespace TrashCollector
                 roleManager.Create(role);
 
             }
+            else
+            {
+             
 
-            // Creating an Employee role    
+            }
+
+            //////////// Creating an Employee role 
+
             if (!roleManager.RoleExists("Employee"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
